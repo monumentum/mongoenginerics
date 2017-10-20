@@ -16,7 +16,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='apistarmongogeneric',
+    name='mongoenginerics',
     version='0.1.0',
     description='Exporting default routes for your projects',
     long_description=long_description,
@@ -36,10 +36,10 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
 
-    keywords='apistar mongo mongoengine generic',
+    keywords='mongo mongoengine generic',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
 
-    install_requires=['mongoengine', 'apistar'],
+    install_requires=['mongoengine'],
     extras_require={
         'dev': [],
         'test': [],
@@ -47,7 +47,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'genericfy=genericfy:main',
+            'mongoenginerics=mongoenginerics:main',
         ],
     },
 )
