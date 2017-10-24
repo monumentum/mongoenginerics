@@ -1,19 +1,20 @@
 import json
 
-def to_json(self):
-    def wrapper(obj):
-        return json.loads(obj.to_json())
+def to_json(fn):
+    def wrapper(self, *args, **kwargs):
+        return json.loads(fn(self, *args, **kwargs).to_json())
 
     return wrapper
 
-def save(self):
-    def wrapper(item):
-        return item.save()
+def save(fn):
+    def wrapper(self, *args, **kwargs):
+        return fn(self, *args, **kwargs).save()
 
     return wrapper
 
-def delete(self):
-    def wrapper(item):
-        return item.delete()
+def delete(fn):
+    def wrapper(self, *args, **kwargs):
+        fn(self, *args, **kwargs).delete()
+        return {"deleted": True, "id": args[0]}
 
     return wrapper

@@ -1,36 +1,37 @@
-class ApiStarAdapter():
-    _handles = []
+import importlib
+import json
+from .base import MongoEnginericsAdapter
 
-    def __init__(self, app):
-        self.engine = app.engine
+class ApistarWSGIAdapter(MongoEnginericsAdapter):
+    def __init__(self, *args, **kwargs):
+        self.engine = importlib.import_module('apistar')
+        self._wsgi = importlib.import_module('apistar.frameworks.wsgi')
+        super(ApistarWSGIAdapter, self).__init__(*args, **kwargs)
 
     def attach(self, ctrl):
-        def update(item_id, updates: self.engine.http.Body):
-            return ctrl.update(item_id, updates)
-
         def find(query: self.engine.http.QueryParams):
             return ctrl.find(query)
 
+        def update(item_id, updates: self.engine.http.Body):
+            return ctrl.update(item_id, json.loads(updates))
+
         def create(body: self.engine.http.Body):
-            return ctrl.create(body)
+            return ctrl.create(json.loads(body))
 
-        self._handles.append(
-            self.engine.Include('/{}'.format(ctrl.name), [
-                self.engine.Route('/', 'GET', find),
-                self.engine.Route('/', 'POST', create),
-                self.engine.Route('/{item_id}', 'GET', ctrl.find_one),
-                self.engine.Route('/{item_id}', 'PUT', update),
-                self.engine.Route('/{item_id}', 'DELETE', ctrl.delete),
-            ])
-        )
+        def find_one(item_id):
+            return ctrl.find_one(item_id)
 
-    def mount_app(self):
-        routes = []
+        def delete(item_id):
+            return ctrl.delete(item_id)
 
-        for handle in self._handles:
-            routes.append(handle)
+        return self.engine.Include('/{}'.format(ctrl.name), [
+            self.engine.Route('/', 'GET', find),
+            self.engine.Route('/', 'POST', create),
+            self.engine.Route('/{item_id}', 'GET', find_one),
+            self.engine.Route('/{item_id}', 'PUT', update),
+            self.engine.Route('/{item_id}', 'DELETE', delete),
+        ])
 
-        self.app = self.engine.App(routes=routes)
-
-    def run(self):
-        self.app.run()
+    def get_app(self):
+        routes = [self.attach(ctrl()) for ctrl in self._controllers]
+        return self._wsgi.WSGIApp(routes=routes)

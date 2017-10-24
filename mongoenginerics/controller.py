@@ -5,7 +5,7 @@ class Controller():
 
     @mongo_obj.to_json
     def find(self, query):
-        self.model.objects()
+        return self.model.objects()
 
 
     @mongo_obj.to_json
@@ -19,14 +19,19 @@ class Controller():
         return self.model(**body)
 
 
-    @mongo_obj.to_json
     @mongo_obj.delete
     def delete(self, item_id):
         return self._find_one(item_id)
 
     @mongo_obj.to_json
-    def update(self, item_id, mod):
-        pass
+    @mongo_obj.save
+    def update(self, item_id, updates):
+        item = self._find_one(item_id)
+
+        for key, value in updates.items():
+            setattr(item, key, value)
+
+        return item
 
 
     def _find_one(self, item_id):
