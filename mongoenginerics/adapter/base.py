@@ -1,6 +1,7 @@
 from mongoengine import connect
 
-class MongoEnginericsAdapter():
+
+class MongoEnginericsAdapter:
     _controllers = []
 
     def __init__(self, database=''):
@@ -10,7 +11,7 @@ class MongoEnginericsAdapter():
         self._controllers.append(ctrl)
 
     def get_app(self):
-        raise Exception('@todo')
+        raise NotImplementedError()  # TODO
 
     def attach(self):
-        raise Exception('@todo')
+        raise NotImplementedError()  # TODO

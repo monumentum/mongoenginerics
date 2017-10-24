@@ -1,0 +1,20 @@
+language: python
+
+python:
+  - "3.6"
+
+services:
+  - mongo
+
+install:
+  - make install
+
+script:
+  - make lint
+  - make test
+
+cache:
+  - pip
+
+after_success:
+  - coveralls
