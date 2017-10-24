@@ -1,4 +1,4 @@
-.PHONY: install lint
+.PHONY: install lint test
 
 
 install:
@@ -6,3 +6,6 @@ install:
 
 lint:
 	flake8
+
+test:
+	coverage run --source=mongoenginerics -m unittest discover -s tests/

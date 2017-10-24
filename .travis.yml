@@ -11,6 +11,10 @@ install:
 
 script:
   - make lint
+  - make test
 
 cache:
   - pip
+
+after_success:
+  - coveralls
