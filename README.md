@@ -46,4 +46,11 @@ if __name__ == 'main':
 
 
 # Contributing
-@todo
+
+
+### Setup Environment
+
+- fork this project
+- setup [virtualenvwrapper](http://virtualenvwrapper.readthedocs.io/en/latest/)
+- create a virtualenv (`mkvirtualenv mongoenginerics`)
+- install dependencies: `make install`
