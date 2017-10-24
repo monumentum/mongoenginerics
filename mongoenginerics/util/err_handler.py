@@ -4,5 +4,4 @@ def err_handler(fn):
             fn()
         except Exception as e:
             raise e
-
     return wrapper

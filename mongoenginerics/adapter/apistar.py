@@ -2,6 +2,7 @@ import importlib
 import json
 from .base import MongoEnginericsAdapter
 
+
 class ApistarWSGIAdapter(MongoEnginericsAdapter):
     def __init__(self, *args, **kwargs):
         self.engine = importlib.import_module('apistar')
